@@ -20,32 +20,49 @@ namespace Arbor.WebApi.Formatting.HtmlForms
         public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, HttpContent content,
             IFormatterLogger formatterLogger)
         {
-            var convertedObject = ReadObjectFromStream(readStream, type);
+            var task = ReadObjectFromStreamAsync(type, readStream, content, formatterLogger);
 
-            return Task.FromResult(convertedObject);
+            return task;
         }
 
-        object ReadObjectFromStream(Stream stream, Type type)
+        async Task<object> ReadObjectFromStreamAsync(Type type, Stream readStream, HttpContent content,
+            IFormatterLogger formatterLogger)
         {
-            var pairs = stream.ReadFormUrlEncoded(ReadBufferSize).ToArray();
+            var targetType = typeof (FormDataCollection);
+
+            object obj = await base.ReadFromStreamAsync(targetType, readStream, content, formatterLogger);
+
+            var formDataCollection = (FormDataCollection) obj;
 
             var dynamicObject = new ExpandoObject();
 
-            var pairGroups =
-                pairs.GroupBy(pair => pair.Key)
-                    .Select(x => new {x.Key, Values = x.Select(item => item.Value).ToList()})
-                    .ToArray();
+            var pairGroups = formDataCollection
+                .GroupBy(pair => pair.Key)
+                .Select(grouping => new
+                                    {
+                                        grouping.Key,
+                                        Values = grouping
+                                            .Select(item => item.Value)
+                                            .ToArray()
+                                    })
+                .ToArray();
 
-            foreach (var keyValuePair in pairGroups.Where(x => x.Values.Count == 1))
+            IDictionary<string, object> dynamicObjectDictionary = dynamicObject;
+
+            var singleValuePairs = pairGroups.Where(x => x.Values.Count() == 1);
+
+            foreach (var keyValuePair in singleValuePairs)
             {
-                ((IDictionary<string, object>) dynamicObject)[keyValuePair.Key] = keyValuePair.Values.Single();
+                dynamicObjectDictionary[keyValuePair.Key] = keyValuePair.Values.Single();
             }
 
-            foreach (var keyValuePair in pairGroups.Where(x => x.Values.Count >= 2))
-            {
-                string[] values = keyValuePair.Values.ToArray();
+            var multipleValuesPairs = pairGroups.Where(x => x.Values.Count() >= 2);
 
-                ((IDictionary<string, object>) dynamicObject)[keyValuePair.Key] = values;
+            foreach (var keyValuePair in multipleValuesPairs)
+            {
+                string[] values = keyValuePair.Values;
+
+                dynamicObjectDictionary[keyValuePair.Key] = values;
             }
 
             var json = JsonConvert.SerializeObject(dynamicObject);
