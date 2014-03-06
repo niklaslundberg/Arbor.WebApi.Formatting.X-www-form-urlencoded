@@ -27,7 +27,7 @@ An object of type BookingCancellationRequest can be created automatically by the
 
 If there are multiple key-value pairs with the same key then the values will be mapped to a string array.
 
-newUsers=Alice&newUsers=Bob
+    newUsers=Alice&newUsers=Bob
 
     public class NewUsersRequest
     {
