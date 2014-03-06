@@ -1,0 +1,3 @@
+This software have licensed the following third-party licenses:
+
+ASP.NET, http://aspnetwebstack.codeplex.com/, Apache License, Version 2.0 http://www.apache.org/licenses/LICENSE-2.0, Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.
