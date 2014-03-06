@@ -4,7 +4,22 @@ The XWwwFormUrlEncodedFormatter makes it possible to extract values from a x-www
 
 It matches x-www-form-urlencoded parameters object properties. 
 
+Make sure to register it as the first formatter or remove the default registered JQueryMvcFormUrlEncodedFormatter instance.
+
+The JQueryMvcFormUrlEncodedFormatter cannot handle immutable classes without a default constructor.
+
+    HttpConfiguration config = GlobalConfiguration.Configuration;
+    var formatters = config.Formatters;
+    formatters.Insert(0, new XWwwFormUrlEncodedFormatter());
+
 Example: 
+
+    public class BookingController : ApiController
+    { 
+      public object Post(BookingCancellationRequest request) {
+        return request; //Just a sample echo response
+      }
+    }
 
     public class BookingCancellationRequest
     {
@@ -28,6 +43,8 @@ An object of type BookingCancellationRequest can be created automatically by the
 If there are multiple key-value pairs with the same key then the values will be mapped to a string array.
 
     newUsers=Alice&newUsers=Bob
+
+will be mapped to an object of class
 
     public class NewUsersRequest
     {
