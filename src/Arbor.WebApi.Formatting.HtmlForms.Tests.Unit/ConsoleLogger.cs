@@ -7,12 +7,12 @@ namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit
     {
         public void LogError(string errorPath, string errorMessage)
         {
-            Console.WriteLine(errorMessage + ": " + errorPath);
+            Console.Error.WriteLine("{0}: {1}", errorMessage, errorPath);
         }
 
         public void LogError(string errorPath, Exception exception)
         {
-            Console.WriteLine(exception + ": " + errorPath);
+            Console.Error.WriteLine("{0}: {1}", exception, errorPath);
         }
     }
 }
