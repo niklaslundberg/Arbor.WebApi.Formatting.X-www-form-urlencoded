@@ -57,13 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleLogger.cs" />
-    <Compile Include="NewUsersRequest.cs" />
+    <Compile Include="SampleTypes\NewUsersRequest.cs" />
     <Compile Include="when_deserializing_an_immutable_object_with_enumerable_constructor_parameter.cs" />
     <Compile Include="when_deserializing_an_immutable_object_with_simple_constructor_parameters.cs" />
-    <Compile Include="BookingCancellationRequest.cs" />
+    <Compile Include="SampleTypes\BookingCancellationRequest.cs" />
     <Compile Include="when_deserializing_an_object_with_a_default_constructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DefaultConstructorObjectWithSimpleGetSetProperties.cs" />
+    <Compile Include="SampleTypes\DefaultConstructorObjectWithSimpleGetSetProperties.cs" />
     <Compile Include="ValuesExtensions.cs" />
     <Compile Include="when_deserializing_an_object_with_a_default_constructor_with_no_values.cs" />
   </ItemGroup>

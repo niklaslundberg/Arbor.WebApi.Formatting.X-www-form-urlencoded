@@ -1,4 +1,4 @@
-﻿namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit
+﻿namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit.SampleTypes
 {
     public class DefaultConstructorObjectWithSimpleGetSetProperties
     {

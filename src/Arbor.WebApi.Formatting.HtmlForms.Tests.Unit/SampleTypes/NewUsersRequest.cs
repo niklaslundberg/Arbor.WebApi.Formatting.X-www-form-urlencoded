@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit
+namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit.SampleTypes
 {
     public class NewUsersRequest
     {

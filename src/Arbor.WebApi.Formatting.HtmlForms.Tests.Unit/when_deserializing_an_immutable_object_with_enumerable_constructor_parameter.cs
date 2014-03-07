@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using Arbor.WebApi.Formatting.HtmlForms.Tests.Unit.SampleTypes;
 using FluentAssertions;
 using Machine.Specifications;
 
