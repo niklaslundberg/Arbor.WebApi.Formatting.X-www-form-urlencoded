@@ -14,12 +14,39 @@ namespace Arbor.WebApi.Formatting.HtmlForms
     {
         public override bool CanReadType(Type type)
         {
-            return true;
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            bool isConcreteClass = type.IsClass && !type.IsAbstract;
+
+            return isConcreteClass;
         }
 
         public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, HttpContent content,
             IFormatterLogger formatterLogger)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            if (readStream == null)
+            {
+                throw new ArgumentNullException("readStream");
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException("content");
+            }
+
+            if (!CanReadType(type))
+            {
+                throw new NotSupportedException(string.Format("Cannot deserialize type {0}", type.FullName));
+            }
+
             var task = ReadObjectFromStreamAsync(type, readStream, content, formatterLogger);
 
             return task;
@@ -28,11 +55,11 @@ namespace Arbor.WebApi.Formatting.HtmlForms
         async Task<object> ReadObjectFromStreamAsync(Type type, Stream readStream, HttpContent content,
             IFormatterLogger formatterLogger)
         {
-            var targetType = typeof (FormDataCollection);
+            Type targetType = typeof (FormDataCollection);
 
-            object obj = await base.ReadFromStreamAsync(targetType, readStream, content, formatterLogger);
+            object deserializedObject = await base.ReadFromStreamAsync(targetType, readStream, content, formatterLogger);
 
-            var formDataCollection = (FormDataCollection) obj;
+            var formDataCollection = (FormDataCollection) deserializedObject;
 
             var dynamicObject = new ExpandoObject();
 
@@ -49,14 +76,14 @@ namespace Arbor.WebApi.Formatting.HtmlForms
 
             IDictionary<string, object> dynamicObjectDictionary = dynamicObject;
 
-            var singleValuePairs = pairGroups.Where(x => x.Values.Count() == 1);
+            var singleValuePairs = pairGroups.Where(pairGroup => pairGroup.Values.Count() == 1);
 
             foreach (var keyValuePair in singleValuePairs)
             {
                 dynamicObjectDictionary[keyValuePair.Key] = keyValuePair.Values.Single();
             }
 
-            var multipleValuesPairs = pairGroups.Where(x => x.Values.Count() >= 2);
+            var multipleValuesPairs = pairGroups.Where(pairGroup => pairGroup.Values.Count() >= 2);
 
             foreach (var keyValuePair in multipleValuesPairs)
             {
@@ -65,7 +92,7 @@ namespace Arbor.WebApi.Formatting.HtmlForms
                 dynamicObjectDictionary[keyValuePair.Key] = values;
             }
 
-            var json = JsonConvert.SerializeObject(dynamicObject);
+            string json = JsonConvert.SerializeObject(dynamicObject);
 
             try
             {
@@ -73,10 +100,10 @@ namespace Arbor.WebApi.Formatting.HtmlForms
 
                 return instance;
             }
-            catch (Exception ex)
+            catch (JsonSerializationException ex)
             {
-                Console.WriteLine(ex);
-                return null;
+                formatterLogger.LogError(string.Format("Could not deserialize type {0} from JSON '{1}'", type, json), ex);
+                throw;
             }
         }
     }
