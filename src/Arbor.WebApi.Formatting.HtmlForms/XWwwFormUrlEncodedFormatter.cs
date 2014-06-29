@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Arbor.WebApi.Formatting.HtmlForms
 {
@@ -47,7 +43,7 @@ namespace Arbor.WebApi.Formatting.HtmlForms
                 throw new NotSupportedException(string.Format("Cannot deserialize type {0}", type.FullName));
             }
 
-            var task = ReadObjectFromStreamAsync(type, readStream, content, formatterLogger);
+            Task<object> task = ReadObjectFromStreamAsync(type, readStream, content, formatterLogger);
 
             return task;
         }
@@ -55,56 +51,14 @@ namespace Arbor.WebApi.Formatting.HtmlForms
         async Task<object> ReadObjectFromStreamAsync(Type type, Stream readStream, HttpContent content,
             IFormatterLogger formatterLogger)
         {
-            Type targetType = typeof (FormDataCollection);
+            Type formDataType = typeof (FormDataCollection);
 
-            object deserializedObject = await base.ReadFromStreamAsync(targetType, readStream, content, formatterLogger);
+            object deserializedObject = await base.ReadFromStreamAsync(formDataType, readStream, content, formatterLogger);
 
             var formDataCollection = (FormDataCollection) deserializedObject;
 
-            var dynamicObject = new ExpandoObject();
-
-            var pairGroups = formDataCollection
-                .GroupBy(pair => pair.Key)
-                .Select(grouping => new
-                                    {
-                                        grouping.Key,
-                                        Values = grouping
-                                            .Select(item => item.Value)
-                                            .ToArray()
-                                    })
-                .ToArray();
-
-            IDictionary<string, object> dynamicObjectDictionary = dynamicObject;
-
-            var singleValuePairs = pairGroups.Where(pairGroup => pairGroup.Values.Count() == 1);
-
-            foreach (var keyValuePair in singleValuePairs)
-            {
-                dynamicObjectDictionary[keyValuePair.Key] = keyValuePair.Values.Single();
-            }
-
-            var multipleValuesPairs = pairGroups.Where(pairGroup => pairGroup.Values.Count() >= 2);
-
-            foreach (var keyValuePair in multipleValuesPairs)
-            {
-                string[] values = keyValuePair.Values;
-
-                dynamicObjectDictionary[keyValuePair.Key] = values;
-            }
-
-            string json = JsonConvert.SerializeObject(dynamicObject);
-
-            try
-            {
-                var instance = JsonConvert.DeserializeObject(json, type);
-
-                return instance;
-            }
-            catch (JsonSerializationException ex)
-            {
-                formatterLogger.LogError(string.Format("Could not deserialize type {0} from JSON '{1}'", type, json), ex);
-                throw;
-            }
+            object instance = formDataCollection.ParseFromCollection(type);
+            return instance;
         }
     }
 }
