@@ -9,6 +9,11 @@ namespace Arbor.WebApi.Formatting.HtmlForms
 {
     public static class FormsExtensions
     {
+        public static object ParseFromCollection<T>(this FormDataCollection formDataCollection)
+        {
+            return ParseFromCollection(formDataCollection, typeof (T));
+        }
+
         public static object ParseFromCollection(this FormDataCollection formDataCollection, Type targetType)
         {
             if (formDataCollection == null)
