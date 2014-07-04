@@ -21,7 +21,7 @@
     <licenseUrl>https://github.com/niklaslundberg/Arbor.WebApi.Formatting.X-www-form-urlencoded/blob/develop/LICENSE.txt</licenseUrl>
     <copyright>Copyright Niklas Lundberg 2014</copyright>
     <dependencies>
-      <dependency id="Microsoft.AspNet.WebApi.Core" version="[5.1,5.2)" />
+      <dependency id="Microsoft.AspNet.WebApi.Core" version="[5.1,5.3)" />
     </dependencies>
     <references></references>
     <tags></tags>
