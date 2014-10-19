@@ -1,4 +1,11 @@
 #################
+## Arbor.WebApi.Formatting.X-www-form-urlencoded
+#################
+packages
+README.html
+_patchedAssemblyInfos
+
+#################
 ## Eclipse
 #################
 
