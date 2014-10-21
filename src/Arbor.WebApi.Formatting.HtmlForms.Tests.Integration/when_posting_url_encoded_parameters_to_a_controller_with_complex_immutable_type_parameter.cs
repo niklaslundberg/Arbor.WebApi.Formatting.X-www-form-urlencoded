@@ -28,7 +28,7 @@ namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Integration
 
         Establish context = () =>
         {
-            baseUri = new Uri("http://localhost:9090");
+            baseUri = new Uri("http://localhost:54321");
             server = WebApp.Start<Startup>(url: baseUri.ToString());
 
             httpClient = new HttpClient();
