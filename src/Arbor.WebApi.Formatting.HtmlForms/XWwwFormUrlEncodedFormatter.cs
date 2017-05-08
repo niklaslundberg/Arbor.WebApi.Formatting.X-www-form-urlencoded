@@ -12,7 +12,7 @@ namespace Arbor.WebApi.Formatting.HtmlForms
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             bool isConcreteClass = type.IsClass && !type.IsAbstract;
@@ -25,22 +25,22 @@ namespace Arbor.WebApi.Formatting.HtmlForms
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             if (readStream == null)
             {
-                throw new ArgumentNullException("readStream");
+                throw new ArgumentNullException(nameof(readStream));
             }
 
             if (content == null)
             {
-                throw new ArgumentNullException("content");
+                throw new ArgumentNullException(nameof(content));
             }
 
             if (!CanReadType(type))
             {
-                throw new NotSupportedException(string.Format("Cannot deserialize type {0}", type.FullName));
+                throw new NotSupportedException($"Cannot deserialize type {type.FullName}");
             }
 
             Task<object> task = ReadObjectFromStreamAsync(type, readStream, content, formatterLogger);

@@ -5,6 +5,7 @@ packages
 README.html
 _patchedAssemblyInfos
 Artifacts
+.vs
 
 #################
 ## Eclipse
