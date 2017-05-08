@@ -4,13 +4,11 @@ namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit.SampleTypes
 {
     public class NewUsersRequest
     {
-        readonly IEnumerable<string> _newUsers;
-
         public NewUsersRequest(IEnumerable<string> newUsers)
         {
-            _newUsers = newUsers;
+            NewUsers = newUsers;
         }
 
-        public IEnumerable<string> NewUsers { get { return _newUsers; } }
+        public IEnumerable<string> NewUsers { get; }
     }
 }

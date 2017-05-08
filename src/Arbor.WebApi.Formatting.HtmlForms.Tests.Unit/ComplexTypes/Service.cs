@@ -2,19 +2,19 @@
 {
     public class Service
     {
-        public override string ToString()
+        public Service(string title, int otherProperty)
         {
-            return $"{nameof(Title)}: {Title}, {nameof(OtherProperty)}: {OtherProperty}";
+            Title = title;
+            OtherProperty = otherProperty;
         }
 
         public string Title { get; }
 
         public int OtherProperty { get; set; }
 
-        public Service(string title, int otherProperty)
+        public override string ToString()
         {
-            Title = title;
-            OtherProperty = otherProperty;
+            return $"{nameof(Title)}: {Title}, {nameof(OtherProperty)}: {OtherProperty}";
         }
     }
 }

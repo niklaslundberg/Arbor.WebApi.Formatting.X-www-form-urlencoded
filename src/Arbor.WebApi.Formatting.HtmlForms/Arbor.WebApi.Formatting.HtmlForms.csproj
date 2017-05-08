@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionExensions.cs" />
+    <Compile Include="FormParseException.cs" />
     <Compile Include="FormsExtensions.cs" />
     <Compile Include="XWwwFormUrlEncodedFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

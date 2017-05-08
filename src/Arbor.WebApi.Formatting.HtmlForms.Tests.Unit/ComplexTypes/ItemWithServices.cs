@@ -5,6 +5,12 @@ namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit.ComplexTypes
 {
     public class ItemWithServices
     {
+        public string Description { get; set; }
+
+        public int NumberOfItems { get; set; }
+
+        public List<Service> Services { get; set; }
+
         public override string ToString()
         {
             string services = Services != null
@@ -13,11 +19,5 @@ namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit.ComplexTypes
 
             return $"{nameof(Description)}: {Description}, {nameof(Services)}: {services}";
         }
-
-        public string Description { get; set; }
-
-        public int NumberOfItems { get; set; }
-
-        public List<Service> Services { get; set; }// = new List<Service>();
     }
 }

@@ -59,8 +59,12 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComplexTypes\ComplexRootObject.cs" />
+    <Compile Include="ComplexTypes\DateWrapper.cs" />
     <Compile Include="ComplexTypes\ItemWithServices.cs" />
     <Compile Include="ComplexTypes\Service.cs" />
+    <Compile Include="ComplexTypes\SubComplexType.cs" />
+    <Compile Include="ComplexTypes\SubListItem.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="SampleTypes\NewUsersRequest.cs" />
     <Compile Include="when_deserializing_an_immutable_object_with_enumerable_constructor_parameter.cs" />
@@ -71,7 +75,9 @@
     <Compile Include="SampleTypes\DefaultConstructorObjectWithSimpleGetSetProperties.cs" />
     <Compile Include="ValuesExtensions.cs" />
     <Compile Include="when_deserializing_an_object_with_a_default_constructor_with_no_values.cs" />
+    <Compile Include="when_deserializing_nested_complex_type.cs" />
     <Compile Include="when_deserializing_complex_type.cs" />
+    <Compile Include="when_deserializing_with_bad_data.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

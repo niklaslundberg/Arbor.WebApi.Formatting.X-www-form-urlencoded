@@ -89,6 +89,7 @@ namespace Arbor.WebApi.Formatting.HtmlForms
 
             try
             {
+                Console.WriteLine("parsing " + json + " into type " + targetType);
                 object instance = JsonConvert.DeserializeObject(json, targetType);
 
                 dynamic asDynamic = instance;
@@ -137,7 +138,6 @@ namespace Arbor.WebApi.Formatting.HtmlForms
                                     pairs.Add(new KeyValuePair<string, string>(value.propertyName, valueProperty));
                                 }
                             }
-                            object subTargetInstance = ParseFromPairs(pairs, subTargetType);
 
                             object currentCollection = propertyInfo.GetValue(instance);
 
@@ -156,6 +156,20 @@ namespace Arbor.WebApi.Formatting.HtmlForms
                                         // Ignore exception
                                     }
                                 }
+                                else
+                                {
+                                    var listType = typeof(List<>);
+                                    var constructedListType = listType.MakeGenericType(subTargetType);
+
+                                    try
+                                    {
+                                        newCollection = Activator.CreateInstance(constructedListType);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        // Ignore exception
+                                    }
+                                }
 
                                 if (newCollection == null)
                                 {
@@ -163,28 +177,47 @@ namespace Arbor.WebApi.Formatting.HtmlForms
                                         $"Could not create new {propertyInfo.PropertyType.FullName}");
                                 }
 
-                                propertyInfo.SetValue(instance, newCollection);
+                                if (propertyInfo.PropertyType.IsAssignableFrom(newCollection.GetType()))
+                                {
+                                    propertyInfo.SetValue(instance, newCollection);
 
-                                currentCollection = newCollection;
+                                    currentCollection = newCollection;
+                                }
                             }
 
-                            var propertyCollection = currentCollection as IList;
+                            object subTargetInstance = ParseFromPairs(pairs, subTargetType);
 
-                            if (propertyCollection != null)
+                            var genericCollectionType = typeof(ICollection<>);
+
+                            var constructedCollectionType = genericCollectionType.MakeGenericType(subTargetType);
+
+                            if (constructedCollectionType.IsAssignableFrom(currentCollection.GetType()))
                             {
-                                propertyCollection.Add(subTargetInstance);
+                                var addMethod = currentCollection.GetType()
+                                    .GetMethod("Add", BindingFlags.Instance | BindingFlags.Public);
+
+                                addMethod.Invoke(currentCollection, new object[] { subTargetInstance });
                             }
                         }
                     }
                 }
 
+                if (instance == null)
+                {
+
+                    throw new FormParseException($"Could not parse values to object of type '{targetType}'");
+                }
+
+                Console.WriteLine(instance);
+
                 return instance;
             }
-            catch (JsonSerializationException ex)
+            catch (Exception ex) when (ex.ShouldCatch())
             {
-                throw new InvalidOperationException(
+                throw new FormParseException(
                     string.Format("Could not deserialize type {0} from JSON '{1}'", targetType, json),
                     ex);
+
             }
         }
     }

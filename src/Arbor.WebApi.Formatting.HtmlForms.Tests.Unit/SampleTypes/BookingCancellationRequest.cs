@@ -2,23 +2,14 @@
 {
     public class BookingCancellationRequest
     {
-        readonly int _bookingId;
-        readonly string _reason;
-
         public BookingCancellationRequest(int bookingId, string reason)
         {
-            _bookingId = bookingId;
-            _reason = reason;
+            BookingId = bookingId;
+            Reason = reason;
         }
 
-        public string Reason
-        {
-            get { return _reason; }
-        }
+        public string Reason { get; }
 
-        public int BookingId
-        {
-            get { return _bookingId; }
-        }
+        public int BookingId { get; }
     }
 }
