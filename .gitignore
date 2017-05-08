@@ -6,6 +6,7 @@ README.html
 _patchedAssemblyInfos
 Artifacts
 .vs
+*.orig
 
 #################
 ## Eclipse
