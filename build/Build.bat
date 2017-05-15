@@ -5,7 +5,7 @@ SET Arbor.X.MSBuild.NuGetRestore.Enabled=true
 SET Arbor.X.NuGet.Package.Artifacts.CreateOnAnyBranchEnabled=false
 SET Arbor.X.NuGet.Package.CreateNuGetWebPackages.Enabled=true
 CALL "%~dp0\Build.exe"
-
+SET Arbor.X.NuGet.Package.Artifacts.KeepBinaryAndSymbolTogetherEnabled=false
 REM Restore variables to default
 
 SET Arbor.X.Build.Bootstrapper.AllowPrerelease=
