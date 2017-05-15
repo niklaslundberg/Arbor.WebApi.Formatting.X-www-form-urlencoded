@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arbor.ModelBinding.Core;
 using Arbor.WebApi.Formatting.HtmlForms.Tests.Unit.ComplexTypes;
 using FluentAssertions;
 using Machine.Specifications;
+using Microsoft.Extensions.Primitives;
 
 namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit
 {
@@ -18,7 +20,7 @@ namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit
             exception = Catch.Exception(() =>
             {
                 FormsExtensions.ParseFromPairs(
-                    new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>("bad", "data") },
+                    new List<KeyValuePair<string, StringValues>> { new KeyValuePair<string, StringValues>("bad", "data") },
                     typeof(DateWrapper));
             });
         };
@@ -30,7 +32,7 @@ namespace Arbor.WebApi.Formatting.HtmlForms.Tests.Unit
             exception.Should().NotBeNull();
         };
 
-        private It should_throw_exception_of_type_form_parse_exception =
-            () => { exception.Should().BeOfType<FormParseException>(); };
+        private It should_throw_exception_of_type_argument_exception =
+            () => { exception.Should().BeOfType<ArgumentException>(); };
     }
 }
