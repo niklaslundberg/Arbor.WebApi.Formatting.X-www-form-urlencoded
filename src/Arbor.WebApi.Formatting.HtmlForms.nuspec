@@ -22,6 +22,7 @@
     <copyright>Copyright Niklas Lundberg 2014-2017</copyright>
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi.Core" version="[5.1,5.3)" />
+      <dependency id="Arbor.ModelBinding" version="[0.1,2.0)" />
     </dependencies>
     <references></references>
     <tags></tags>
